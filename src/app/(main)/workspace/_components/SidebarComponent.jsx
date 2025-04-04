@@ -1,9 +1,9 @@
 import React from "react";
-import { getAllWorkspaceService } from "../../../../../service/workspace.service";
-import Logo from "@/components/logo";
-import LogoutButton from "@/components/LogoutButton";
+import { getAllWorkspaceService } from "../../../../service/workspace.service";
+import Logo from "../../../../components/logo";
+import LogoutButton from "../../../../components/LogoutButton";
 import { PlusIcon } from "lucide-react";
-import WorkspaceItem from "@/components/WorkspaceItem";
+import WorkspaceItem from "../../../../components/WorkspaceItem";
 
 const SidebarComponent = async () => {
   const { payload: workspaces } = await getAllWorkspaceService();

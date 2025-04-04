@@ -1,6 +1,6 @@
 // pages/workspace/[workspaceId].js
 
-import { getAllTaskByWorkspaceIdService } from "../../../../../service/task.service";
+import { getAllTaskByWorkspaceIdService } from "../../../../service/task.service";
 import Content from "../_components/ContainComponent";
 
 export default async function WorkspacePage({ params }) {
@@ -8,7 +8,6 @@ export default async function WorkspacePage({ params }) {
 
   // Fetch tasks for the workspace
   const { payload } = await getAllTaskByWorkspaceIdService(workspaceId);
-  console.log("response", payload);
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import headerToken from "@/app/api/headerToken";
+import headerToken from "../../src/app/api/headerToken";
 
 //Get All workspace
 export const getAllWorkspaceService = async () => {
@@ -64,15 +64,12 @@ export const updateWorkspaceById = async (workspaceId, workspaceData) => {
 
 //Post Workspace
 export const postWorkspace = async (workspaceData) => {
-  const token = await headerToken();
+  const header = await headerToken();
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/workspace`, {
       method: "POST",
-      headers: {
-        ...token,
-        "Content-Type": "application/json",
-      },
+      headers: header,
       body: JSON.stringify(workspaceData),
     });
 
@@ -82,20 +79,3 @@ export const postWorkspace = async (workspaceData) => {
     console.error("Error posting workspace:", e);
   }
 };
-
-// service/workspace.service.js
-// export const toggleFavoriteService = async (workspaceId, isFavorite) => {
-//   const response = await fetch(`/api/workspaces/${workspaceId}/favorite`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ isFavorite }),
-//   });
-
-//   if (!response.ok) {
-//     throw new Error("Failed to toggle favorite");
-//   }
-
-//   return response.json();
-// };

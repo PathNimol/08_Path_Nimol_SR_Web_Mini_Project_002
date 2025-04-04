@@ -1,4 +1,4 @@
-import headerToken from "@/app/api/headerToken";
+import headerToken from "../../src/app/api/headerToken";
 
 export const getUser = async () => {
   const header = await headerToken();

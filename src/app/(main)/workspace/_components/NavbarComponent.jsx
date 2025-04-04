@@ -1,5 +1,4 @@
-import { getUser } from "../../../../../service/user.service";
-import { getWorkspaceById } from "../../../../../service/workspace.service";
+import { getUser } from "../../../../service/user.service";
 
 const Navbar = async () => {
   const { payload: users } = await getUser();

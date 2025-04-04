@@ -1,16 +1,13 @@
 // components/Content.js
 "use client"; // Mark this as a Client Component
 
-import CardComponent from "@/components/card";
-import { Button } from "@/components/ui/button";
+import CardComponent from "../../../../components/card";
+import { Button } from "../../../../components/ui/button";
 import { Heart, Plus } from "lucide-react";
 import React, { useState } from "react";
+import { postTask } from "../../../../service/task.service";
 
 const Content = ({ payload }) => {
-  // Log the payload for debugging
-  console.log("Payload:", payload);
-
-  // Validate the payload and provide a fallback
   const safePayload = Array.isArray(payload) ? payload : [];
 
   // Group tasks by status
@@ -21,17 +18,14 @@ const Content = ({ payload }) => {
   const finishedTasks =
     safePayload.filter((task) => task.status === "FINISHED") || [];
 
-  // State for managing modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // State for managing form data
   const [formData, setFormData] = useState({
     workspaceId: "",
     taskTitle: "",
     taskDetail: "",
-    tag: "",
-    status: "NOT_STARTED", // Default status
-    startDate: "",
+    tag: "DESIGN",
     endDate: "",
   });
 
@@ -41,18 +35,40 @@ const Content = ({ payload }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+
+    try {
+      // Prepare task data
+      const taskData = {
+        taskTitle: formData.taskTitle,
+        taskDetail: formData.taskDetail,
+        tag: formData.tag,
+        endDate: formData.endDate,
+        status: "NOT_STARTED", // Default status for a new task
+      };
+
+      // Call the API function
+      const response = await postTask(formData.workspaceId, taskData);
+
+      console.log("jkndfsskjssddjnsnkn", response);
+
+      if (response) {
+        console.log("Task successfully posted:", response);
+        // Optionally, update state to reflect the new task
+      } else {
+        console.error("Failed to post task");
+      }
+    } catch (error) {
+      console.error("Error posting task:", error);
+    }
+
     // Reset form and close modal
     setFormData({
       workspaceId: "",
       taskTitle: "",
       taskDetail: "",
-      tag: "",
-      status: "NOT_STARTED",
-      startDate: "",
+      tag: "DESIGN",
       endDate: "",
     });
     setIsModalOpen(false);
@@ -140,7 +156,7 @@ const Content = ({ payload }) => {
 
       {/* Modal for Adding a New Task */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/10 backdrop-blur-sm bg-opacity-2 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
             <h2 className="text-xl font-bold mb-4">Add New Task</h2>
             <form onSubmit={handleSubmit}>
@@ -202,38 +218,6 @@ const Content = ({ payload }) => {
                 />
               </div>
 
-              {/* Status */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Status
-                </label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="NOT_STARTED">Not Started</option>
-                  <option value="IN_PROGRESS">In Progress</option>
-                  <option value="FINISHED">Finished</option>
-                </select>
-              </div>
-
-              {/* Start Date */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Start Date
-                </label>
-                <input
-                  type="date"
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  required
-                />
-              </div>
-
               {/* End Date */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
@@ -262,7 +246,7 @@ const Content = ({ payload }) => {
                   type="submit"
                   className="bg-[#009990] hover:bg-[#007d70] text-white px-4 py-2 rounded-lg"
                 >
-                  Save
+                  {isSubmitting ? "Saving..." : "Save"}
                 </Button>
               </div>
             </form>

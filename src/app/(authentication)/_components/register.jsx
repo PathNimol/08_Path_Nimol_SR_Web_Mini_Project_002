@@ -1,15 +1,16 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { KeyRound, Mail, UserRound } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import { registerService } from "../../../../service/auth/register.service";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "@/lib/zod/registerSchema";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { registerSchema } from "@/lib/zod/registerSchema";
+import { registerService } from "../../../service/auth/register.service";
+import { Label } from "@radix-ui/react-label";
 
 export default function RegisterComponent() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function RegisterComponent() {
     register,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver("registerSchema"),
   });
 
   const onSubmit = async (data) => {
@@ -43,7 +44,7 @@ export default function RegisterComponent() {
           <UserRound size={20} /> Username
         </Label>
 
-        <Input
+        <input
           type="text"
           placeholder="Please type your username"
           {...register("username")}
@@ -63,7 +64,7 @@ export default function RegisterComponent() {
           <Mail size={20} /> Email
         </Label>
 
-        <Input
+        <input
           type="text"
           placeholder="Please type your email"
           {...register("email")}
@@ -83,7 +84,7 @@ export default function RegisterComponent() {
           <KeyRound size={20} /> Password
         </Label>
 
-        <Input
+        <input
           type="password"
           placeholder="Please type your password"
           {...register("password")}
@@ -95,9 +96,9 @@ export default function RegisterComponent() {
       </div>
 
       {/* sign in button */}
-      <Button className="text-base cursor-pointer bg-persian-green text-white py-2.5 rounded-lg w-full font-bold">
+      <button className="text-base cursor-pointer bg-persian-green text-white py-2.5 rounded-lg w-full font-bold">
         Sign Up{" "}
-      </Button>
+      </button>
 
       {/* underline */}
       <div>
@@ -115,9 +116,9 @@ export default function RegisterComponent() {
 
       {/* sign in with google */}
       <div className=" bg-ghost-white rounded-lg text-center">
-        <Button className="flex gap-2 items-start justify-center w-full bg-ghost-white text-charcoal shadow-none hover:bg-ghost-white/50">
+        <button className="flex gap-2 items-start justify-center w-full bg-ghost-white text-charcoal shadow-none hover:bg-ghost-white/50">
           <img src="/Google Icon.svg" alt="google icon" /> Sign in with google
-        </Button>
+        </button>
       </div>
     </form>
   );
